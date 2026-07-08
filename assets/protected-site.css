@@ -1,0 +1,15 @@
+:root { color-scheme: light; }
+body.protected-shell { margin: 0; font-family: system-ui, sans-serif; background: #faf7f2; color: #222; }
+.protected-shell__header { display: flex; gap: 1rem; align-items: center; justify-content: space-between; flex-wrap: wrap; padding: 1rem 1.25rem; background: #fff; border-bottom: 1px solid #ddd; position: sticky; top: 0; z-index: 10; }
+.protected-shell__brand { font-weight: 700; color: #222; text-decoration: none; }
+.protected-shell__nav { display: flex; gap: .8rem; flex-wrap: wrap; }
+.protected-shell__nav a { color: #333; text-decoration: none; }
+.protected-shell__main { max-width: 920px; margin: 0 auto; padding: 2rem 1.25rem 4rem; }
+.protected-card { background: #fff; border: 1px solid #e4ddd3; border-radius: 12px; padding: 1.2rem 1.25rem; }
+.protected-form { display: grid; gap: .6rem; max-width: 420px; }
+.protected-form input, .protected-form button { font: inherit; padding: .75rem .85rem; border-radius: 10px; border: 1px solid #cfc6bb; }
+.protected-form button { cursor: pointer; background: #222; color: #fff; border-color: #222; }
+.protected-message { min-height: 1.2em; color: #7a1f1f; }
+.protected-asset { background: #fff; border: 1px solid #e4ddd3; border-radius: 12px; padding: 1rem; }
+.protected-asset img, .protected-asset iframe { max-width: 100%; width: 100%; border: 0; }
+.protected-asset iframe { min-height: 80vh; }
