@@ -4,7 +4,19 @@
   const form = document.getElementById('protected-form');
   const input = document.getElementById('protected-passphrase');
   const message = document.getElementById('protected-message');
+  const basePath = normalizeBasePath(window.PROTECTED_SITE_BASE_PATH || '/PCE-site/');
   const isAssetView = new URLSearchParams(location.search).has('asset');
+
+  function stripBasePath(pathname) {
+    const clean = String(pathname || '/');
+    if (clean === basePath) return '/';
+    if (clean.startsWith(basePath)) return '/' + clean.slice(basePath.length).replace(/^/+/, '');
+    return clean.startsWith('/') ? clean : '/' + clean;
+  }
+
+  function toPublicPath(pathname) {
+    return basePath + String(pathname || '').replace(/^/+/, '');
+  }
 
   function setMessage(text, error = true) {
     if (message) {
@@ -77,13 +89,14 @@
   }
 
   function pagePayloadUrl() {
-    const normalized = normalizedRoute(currentRoute());
-    return '/content' + normalized + 'index.html.enc';
+    const normalized = normalizedRoute(stripBasePath(currentRoute()));
+    return toPublicPath('content' + normalized + 'index.html.enc');
   }
 
   function assetPayloadUrl(assetPath) {
     const clean = String(assetPath || '').split('?')[0].split('#')[0];
-    return '/content' + clean + '.enc';
+    const relative = stripBasePath(clean);
+    return toPublicPath('content' + relative + '.enc');
   }
 
   function injectPage(html, title, description) {
@@ -162,7 +175,7 @@
 
     const assetLike = /\.(pdf|png|jpe?g|gif|webp|bmp|svg|tiff?|txt|csv|json|md)$/i.test(target.pathname);
     if (assetLike) {
-      location.href = '/?asset=' + encodeURIComponent(target.pathname);
+      location.href = toPublicPath('?asset=' + encodeURIComponent(target.pathname));
       return true;
     }
 

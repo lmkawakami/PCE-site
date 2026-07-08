@@ -5,30 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Private Ceramics Experiments</title>
     <meta name="description" content="Site protegido por senha." />
-    <link rel="stylesheet" href="/assets/style.css" />
-    <link rel="stylesheet" href="/assets/protected-site.css" />
+    <link rel="stylesheet" href="/PCE-site/assets/style.css" />
+    <link rel="stylesheet" href="/PCE-site/assets/protected-site.css" />
     <script>
       window.PROTECTED_SITE_ROUTE = "/sobre/";
+      window.PROTECTED_SITE_BASE_PATH = "/PCE-site/";
     </script>
-    <script defer src="/assets/protected-site.js"></script>
+    <script defer src="/PCE-site/assets/protected-site.js"></script>
   </head>
   <body class="protected-shell">
     <header class="protected-shell__header">
-      <a class="protected-shell__brand" href="/">Private Ceramics Experiments</a>
+      <a class="protected-shell__brand" href="/PCE-site/">Private Ceramics Experiments</a>
       <nav class="protected-shell__nav">
-        <a href="/">Início</a>
-        <a href="/experimentos/">Experimentos</a>
-        <a href="/fontes/">Fontes</a>
-        <a href="/materiais/">Materiais</a>
-        <a href="/metodos/">Métodos</a>
-        <a href="/glossario/">Glossário</a>
-        <a href="/sobre/">Sobre</a>
+        <a href="/PCE-site/">In�cio</a>
+        <a href="/PCE-site/experimentos/">Experimentos</a>
+        <a href="/PCE-site/fontes/">Fontes</a>
+        <a href="/PCE-site/materiais/">Materiais</a>
+        <a href="/PCE-site/metodos/">M�todos</a>
+        <a href="/PCE-site/glossario/">Gloss�rio</a>
+        <a href="/PCE-site/sobre/">Sobre</a>
       </nav>
     </header>
     <main class="site-main protected-shell__main" id="protected-app">
       <section class="protected-card">
         <h1>Acesso protegido</h1>
-        <p>Digite a senha para abrir este conteúdo.</p>
+        <p>Digite a senha para abrir este conte�do.</p>
         <form id="protected-form" class="protected-form">
           <label for="protected-passphrase">Senha</label>
           <input id="protected-passphrase" name="passphrase" type="password" autocomplete="current-password" />
