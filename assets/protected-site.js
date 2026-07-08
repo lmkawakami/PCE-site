@@ -10,12 +10,12 @@
   function stripBasePath(pathname) {
     const clean = String(pathname || '/');
     if (clean === basePath) return '/';
-    if (clean.startsWith(basePath)) return '/' + clean.slice(basePath.length).replace(/^/+/, '');
+    if (clean.startsWith(basePath)) return '/' + clean.slice(basePath.length).replace(/^\/+/, '');
     return clean.startsWith('/') ? clean : '/' + clean;
   }
 
   function toPublicPath(pathname) {
-    return basePath + String(pathname || '').replace(/^/+/, '');
+    return basePath + String(pathname || '').replace(/^\/+/, '');
   }
 
   function setMessage(text, error = true) {
