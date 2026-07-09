@@ -106,9 +106,45 @@
     return toPublicPath('content' + relative + '.enc');
   }
 
-  function injectPage(html, title, description) {
+  function isLocalAssetPath(pathname) {
+    return /.(pdf|png|jpe?g|gif|webp|bmp|svg|tiff?|txt|csv|json|md)$/i.test(String(pathname || ''));
+  }
+
+  function prepareLocalAssetPlaceholders(rootEl, pageUrl) {
+    rootEl.querySelectorAll('img[src], source[src], iframe[src], audio[src], video[src], embed[src], object[data]').forEach((el) => {
+      const attr = el.tagName.toLowerCase() === 'object' ? 'data' : 'src';
+      const raw = el.getAttribute(attr);
+      if (!raw || raw.startsWith('data:') || raw.startsWith('blob:')) return;
+      const resolved = new URL(raw, pageUrl).pathname;
+      if (!isLocalAssetPath(resolved)) return;
+      el.setAttribute('data-protected-' + attr, raw);
+      el.removeAttribute(attr);
+    });
+  }
+
+  async function hydrateLocalAssets(rootEl, pageUrl) {
+    const nodes = rootEl.querySelectorAll('[data-protected-src], [data-protected-data]');
+    for (const el of nodes) {
+      const attr = el.hasAttribute('data-protected-data') ? 'data' : 'src';
+      const raw = el.getAttribute('data-protected-' + attr);
+      if (!raw) continue;
+      const resolvedUrl = new URL(raw, pageUrl);
+      const assetPath = resolvedUrl.pathname;
+      try {
+        const envelope = await fetchEnvelope(assetPayloadUrl(assetPath));
+        const bytes = await decryptEnvelope(envelope, currentPassphrase());
+        const blob = new Blob([bytes], { type: envelope.mime || 'application/octet-stream' });
+        const objectUrl = URL.createObjectURL(blob);
+        el.setAttribute(attr, objectUrl);
+        el.removeAttribute('data-protected-' + attr);
+      } catch (err) {
+        console.warn('Failed to load protected asset:', assetPath, err);
+      }
+    }
+  }
+
+  async function injectPage(html, title, description) {
     if (title) document.title = title;
-    const main = root || document.querySelector('main');
     if (description) {
       let meta = document.querySelector('meta[name="description"]');
       if (!meta) {
@@ -118,8 +154,13 @@
       }
       meta.content = description;
     }
-    if (main) main.innerHTML = html;
+    const holder = document.createElement('div');
+    holder.innerHTML = html;
+    prepareLocalAssetPlaceholders(holder, location.href);
+    document.body.className = '';
+    document.body.innerHTML = holder.innerHTML;
     attachLinkInterception();
+    await hydrateLocalAssets(document.body, location.href);
   }
 
   function renderAsset(bytes, mime, name) {
@@ -164,7 +205,7 @@
     const bytes = await decryptEnvelope(envelope, passphrase);
     const payload = JSON.parse(bytesToText(bytes));
     sessionStorage.setItem(PASS_KEY, passphrase);
-    injectPage(payload.html || '', payload.title || document.title, payload.description || '');
+    await injectPage(payload.html || '', payload.title || document.title, payload.description || '');
     setMessage('');
   }
 
