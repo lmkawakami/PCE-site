@@ -4,6 +4,13 @@
   const form = document.getElementById('protected-form');
   const input = document.getElementById('protected-passphrase');
   const message = document.getElementById('protected-message');
+
+  function normalizeBasePath(input) {
+    const raw = String(input || '').trim() || '/PCE-site/';
+    const withLeading = raw.startsWith('/') ? raw : '/' + raw;
+    return withLeading.endsWith('/') ? withLeading : withLeading + '/';
+  }
+
   const basePath = normalizeBasePath(window.PROTECTED_SITE_BASE_PATH || '/PCE-site/');
   const isAssetView = new URLSearchParams(location.search).has('asset');
 
