@@ -86,7 +86,7 @@
 
   async function fetchEnvelope(url) {
     const res = await fetch(url, { cache: 'no-store' });
-    if (!res.ok) throw new Error('Conteúdo indisponível.');
+    if (!res.ok) throw new Error('Conte�do indispon�vel.');
     return res.json();
   }
 
@@ -187,7 +187,7 @@
     }
 
     history.pushState({}, '', target.pathname + target.search + target.hash);
-    void unlock(currentPassphrase()).catch((err) => setMessage(err.message || 'Falha ao carregar a página.'));
+    void unlock(currentPassphrase()).catch((err) => setMessage(err.message || 'Falha ao carregar a p�gina.'));
     return true;
   }
 
@@ -210,13 +210,13 @@
   if (form && input) {
     form.addEventListener('submit', (event) => {
       event.preventDefault();
-      unlock(input.value.trim()).catch((err) => setMessage(err.message || 'Senha inválida.'));
+      unlock(input.value.trim()).catch((err) => setMessage(err.message || 'Senha inv�lida.'));
     });
   }
 
   window.addEventListener('popstate', () => {
     if (currentPassphrase()) {
-      void unlock(currentPassphrase()).catch((err) => setMessage(err.message || 'Falha ao carregar a página.'));
+      void unlock(currentPassphrase()).catch((err) => setMessage(err.message || 'Falha ao carregar a p�gina.'));
     }
   });
 
@@ -225,7 +225,7 @@
     if (input) input.value = saved;
     void unlock(saved).catch((err) => {
       sessionStorage.removeItem(PASS_KEY);
-      setMessage(err.message || 'Senha inválida.');
+      setMessage(err.message || 'Senha inv�lida.');
     });
   }
 })();
